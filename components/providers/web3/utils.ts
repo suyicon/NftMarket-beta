@@ -49,7 +49,9 @@ export const CreateWeb3State = ({
         hooks:setupHooks({
             ethereum,
             provider,
-            contract,})
+            contract,
+            isLoading
+        })
     }
 }
 

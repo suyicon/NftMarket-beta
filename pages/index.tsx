@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import nfts from "../content/meta.json"
 import { NftMeta } from '@_types/nft'
 import { useWeb3 } from '@providers/web3'
+import { useListedNft } from '@hooks/web3'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -10,6 +11,11 @@ const inter = Inter({ subsets: ['latin'] })
 
 
 export default function Home() {
+  const { nft } = useListedNft();
+  console.log(nft.data);
+
+
+
   const {provider,contract} = useWeb3();
   console.log(provider);
   console.log(contract);
@@ -46,7 +52,7 @@ export default function Home() {
           </p>
         </div>
         <NftList
-        nfts={nfts as unknown as NftMeta[]}
+        nfts={nft.data}
         />
       </div>
     </div>

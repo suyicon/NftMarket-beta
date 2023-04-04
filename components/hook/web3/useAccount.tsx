@@ -4,13 +4,15 @@ import useSWR, { mutate } from "swr"
 
 type useAccountRes = {
     connect:() =>{}
+    isLoading:boolean;
+    isInstalled:boolean;
 }
 
 type AccountHookFactory = CrytoHookFactory<string,useAccountRes>
 export type useAccountHook = ReturnType<AccountHookFactory>
 
-export const hookFactory:CrytoHookFactory<string,string> = ({provider,ethereum})=>(params:any)=>{
-    const swrRes = useSWR(provider ? "web3/useAccount":null,
+export const hookFactory:AccountHookFactory = ({provider,ethereum,isLoading})=>(params:any)=>{
+    const {data,mutate,isValidating,...swr} = useSWR(provider ? "web3/useAccount":null,
     async ()=>{
         console.log(provider);
         console.log(params);
@@ -22,7 +24,7 @@ export const hookFactory:CrytoHookFactory<string,string> = ({provider,ethereum})
         }
 
         return account;
-     })
+     },{revalidateOnFocus:false})
 
     useEffect(() =>{
         ethereum?.on("accountsChanged",handleAccountsChanged);
@@ -35,10 +37,10 @@ export const hookFactory:CrytoHookFactory<string,string> = ({provider,ethereum})
         if(accounts.length == 0){
             console.error("please connect to Fox Wallet");
         }
-        else if(accounts[0] !== swrRes.data){
-            swrRes.mutate(accounts[0]);
+        else if(accounts[0] !== data){
+            mutate(accounts[0]);
             console.log("account has changed!");
-            console.log(accounts[0]);
+            console.log("account:",accounts[0]);
         }
     }
 
@@ -51,7 +53,11 @@ export const hookFactory:CrytoHookFactory<string,string> = ({provider,ethereum})
         }
     }
     return {
-        ...swrRes,
+        ...swr,
+        data,
+        isLoading:isLoading||isValidating,
+        isInstalled:ethereum?.isMetaMask||false,
+        mutate,
         connect
     };
 }

@@ -4,10 +4,10 @@ import { type } from "os";
 import { SWRResponse } from "swr"
 
 export type Web3Dependencies= {
-    provider:ethers.providers.Web3Provider;
+    provider:ethers.providers.Web3Provider | undefined;
     contract:Contract;
     ethereum:MetaMaskInpageProvider;
-
+    isLoading:boolean;
 }
 
 export type CrytoSWRResponse<D = any,R = any> = SWRResponse<D> & R;
