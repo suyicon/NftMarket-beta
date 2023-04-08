@@ -23,3 +23,11 @@ export const useListedNft =() =>{
         nft:nftResponse
     }
 }
+
+export const useOwnedNft =() =>{
+    const {hooks} = useWeb3();
+    const nftResponse = hooks.useOwnedNft("");
+    return{
+        nft:nftResponse
+    }
+}

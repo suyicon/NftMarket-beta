@@ -1,4 +1,6 @@
 import { MetaMaskInpageProvider } from "@metamask/providers";
+import { Web3Dependencies } from "@_types/hooks";
+import { NftMarketContract } from "@_types/nftMarketContract";
 import { setupHooks, Web3Hooks } from "components/hook/web3/setupHooks";
 import { Contract, ethers} from "ethers";
 
@@ -14,14 +16,14 @@ declare global{
 export type Web3Params = {
     ethereum :MetaMaskInpageProvider | null ;
     provider :ethers.providers.Web3Provider | null;
-    contract :Contract | null;
+    contract :NftMarketContract | null;
     isLoading:boolean;
     hooks:Web3Hooks;
 }
 
 export type Web3State = {
     provider:ethers.providers.Web3Provider;
-    contract:Contract;
+    contract:NftMarketContract;
     ethereum:MetaMaskInpageProvider;
     isLoading:boolean;
     hooks:Web3Hooks;

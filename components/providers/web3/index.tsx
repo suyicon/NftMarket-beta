@@ -4,6 +4,7 @@ import { Web3Provider as Provider } from '@ethersproject/providers';
 import {ethers} from 'ethers';
 import { setupHooks } from "components/hook/web3/setupHooks";
 import { MetaMaskInpageProvider } from "@metamask/providers";
+import { NftMarketContract } from "@_types/nftMarketContract";
 
 function pageReload(){
     window.location.reload();
@@ -22,12 +23,15 @@ const Web3Provider:FunctionComponent = ({children})=>{
             try{
             const w3provider = new ethers.providers.Web3Provider(window.ethereum as any);
             const contract = await loadContract("5777","NftMarket",w3provider);
+            
+            const signer = w3provider.getSigner();
+            const signedContract = contract.connect(signer);
 
-            setGlobalListeners(window.ethereum);
+            setTimeout(()=>{setGlobalListeners(window.ethereum)},300);
             setWeb3Api(CreateWeb3State({
                 ethereum:window.ethereum,
                 provider:w3provider,
-                contract,
+                contract:signedContract as unknown as NftMarketContract,
                 isLoading:false,
                 hooks:setupHooks({
                     ethereum:window.ethereum,

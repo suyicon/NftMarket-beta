@@ -11,11 +11,11 @@ type useAccountRes = {
 type AccountHookFactory = CrytoHookFactory<string,useAccountRes>
 export type useAccountHook = ReturnType<AccountHookFactory>
 
-export const hookFactory:AccountHookFactory = ({provider,ethereum,isLoading})=>(params:any)=>{
-    const {data,mutate,isValidating,...swr} = useSWR(provider ? "web3/useAccount":null,
+export const hookFactory:AccountHookFactory = ({provider,ethereum,isLoading})=>()=>{
+    const {data,mutate,...swr} = useSWR(provider ? "web3/useAccount":null,
     async ()=>{
         console.log(provider);
-        console.log(params);
+        //console.log(params);
         const accounts = await provider!.listAccounts();
         const account = accounts[0];
 
@@ -55,7 +55,7 @@ export const hookFactory:AccountHookFactory = ({provider,ethereum,isLoading})=>(
     return {
         ...swr,
         data,
-        isLoading:isLoading||isValidating,
+        isLoading:isLoading,
         isInstalled:ethereum?.isMetaMask||false,
         mutate,
         connect

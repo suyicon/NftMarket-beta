@@ -1,7 +1,7 @@
 import { BaseLayout , NftList } from '@ui'
 import { Inter } from 'next/font/google'
 import nfts from "../content/meta.json"
-import { NftMeta } from '@_types/nft'
+import { Nft, NftMeta } from '@_types/nft'
 import { useWeb3 } from '@providers/web3'
 import { useListedNft } from '@hooks/web3'
 
@@ -46,14 +46,14 @@ export default function Home() {
       </div>
       <div className="relative">
         <div className="text-center">
-          <h2 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">Amazing Creatures NFTs</h2>
+          <h2 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">Registry of Persona</h2>
           <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-            Mint a NFT to get unlimited ownership forever!
+            Gain a Persona to steal evildoers' heart!
           </p>
         </div>
-        <NftList
-        nfts={nft.data}
-        />
+          <NftList
+            nfts={nft.data as unknown as Nft[]}
+          />
       </div>
     </div>
   </BaseLayout>

@@ -1,8 +1,7 @@
 import type { NextPage } from 'next'
 import { BaseLayout } from '@ui'
-
-import { NftMeta } from '@_types/nft';
-import nfts from "../content/meta.json"
+import { useOwnedNft } from '@hooks/web3';
+import { Nft, NftMeta } from '@_types/nft';
 import { useEffect, useState } from 'react';
 
 const tabs = [
@@ -14,6 +13,17 @@ function classNames(...classes: string[]) {
 }
 
 const Profile: NextPage = () => {
+  const { nft }  = useOwnedNft();
+  const [activeNft,setActiveNft] = useState<Nft>();
+
+  useEffect(()=>{
+    if(nft.data){
+      setActiveNft(nft.data[0]);
+    }
+    return () => setActiveNft(undefined)
+  },[nft.data])
+
+
   return (
     <BaseLayout>
       <div className="h-full flex">
@@ -53,13 +63,14 @@ const Profile: NextPage = () => {
                     role="list"
                     className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
                   >
-                    {(nfts as NftMeta[]).map((nft) => (
+                    {(nft.data as unknown as Nft[]).map((nft) => (
                       <li
-                        key={nft.image}
+                        onClick={()=>{setActiveNft(nft)}}
+                        key={nft.meta.image}
                         className="relative">
                         <div>
                           <img
-                            src={nft.image}
+                            src={nft.meta.image}
                             alt=""
                             className={classNames(
                              'group-hover:opacity-75',
@@ -67,11 +78,11 @@ const Profile: NextPage = () => {
                             )}
                           />
                           <button onClick={()=>{}} type="button" className="absolute inset-0 focus:outline-none">
-                            <span className="sr-only">View details for {nft.name}</span>
+                            <span className="sr-only">View details for {nft.meta.name}</span>
                           </button>
                         </div>
                         <p className="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none">
-                          {nft.name}
+                          {nft.meta.name}
                         </p>
                       </li>
                     ))}
@@ -82,41 +93,50 @@ const Profile: NextPage = () => {
 
             {/* Details sidebar */}
             <aside className="hidden w-96 bg-white p-8 border-l border-gray-200 overflow-y-auto lg:block">
-            { 
+            { activeNft&&
               <div className="pb-16 space-y-6">
-                {(nfts as NftMeta[]).map((nft) => (
-                <><div>
+                <div>
                         <div className="block w-full aspect-w-10 aspect-h-7 rounded-lg overflow-hidden">
-                            <img src={nft.image} alt="" className="object-cover" />
+                            <img src={activeNft.meta.image} alt="" className="object-cover" />
                         </div>
                         <div className="mt-4 flex items-start justify-between">
                             <div>
                                 <h2 className="text-lg font-medium text-gray-900">
                                     <span className="sr-only">Details for </span>
                                 </h2>
-                                <p className="text-sm font-medium text-gray-500">{nft.description}</p>
+                                <p className="text-sm font-medium text-gray-500">{activeNft.meta.description}</p>
                             </div>
                         </div>
-                    </div><div>
-                            <h3 className="font-medium text-gray-900">Information</h3>
-                            <dl className="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
-
-                            </dl>
-                        </div></>
-                ))}
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-900">Information</h3>
+                  </div>
+                
 
                 <div className="flex">
                   <button
+                    onClick={()=>{
+                      const NFTname = activeNft.meta.name;
+                      const DownloadLink = activeNft.meta.image;
+                      window.open(DownloadLink,NFTname);
+                    }}
                     type="button"
                     className="flex-1 bg-indigo-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
                     Download Image
                   </button>
                   <button
+                    onClick={()=>{
+                      nft.listNFT(
+                      activeNft.tokenId,
+                      activeNft.price
+                      )
+                    }}
+                    disabled = {activeNft.isListed}
                     type="button"
                     className="disabled:text-gray-400 disabled:cursor-not-allowed flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
-                    List Nft
+                    {activeNft.isListed ? "Nft is on sale": "Make Nft on sale"}
                   </button>
                 </div>
               </div>

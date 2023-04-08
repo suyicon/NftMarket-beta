@@ -3,13 +3,143 @@ import { ChangeEvent, useState } from 'react';
 import { BaseLayout } from '@ui'
 import { Switch } from '@headlessui/react'
 import Link from 'next/link'
+import { NftMeta, ipfsRes } from '@_types/nft';
+import axios from 'axios';
+import { useWeb3 } from '@providers/web3';
+import { ethers } from 'ethers';
+import { toast } from 'react-toastify';
 
 const ATTRIBUTES = ["health", "attack", "speed"];
+const ALLOWED_FIELDS = ["name", "description", "image"];
 
 const NftCreate: NextPage = () => {
-
+  const {ethereum,contract} = useWeb3();
   const [nftURI, setNftURI] = useState("");
   const [hasURI, setHasURI] = useState(false);
+  const [nftMeta, setNftMeta] = useState<NftMeta>({
+    name: "",
+    description: "",
+    image: "",
+  });
+  const[price,setPrice] = useState("");
+  const GetSignatureData = async()=>{
+    console.log("create NFT:",nftMeta);
+      const accounts = await ethereum?.request({method:"eth_requestAccounts"}) as string[];
+      const account = accounts[0];
+      const message = await axios.get("/api/verify");
+
+      const data = await ethereum?.request({
+        method:"personal_sign",
+        params:[JSON.stringify(message.data),account,message.data.id]
+      });
+      console.log("signature message:",message.data);
+      return {account,data};
+}
+  const uploadMetaToIpfs = async() =>{
+    try{
+    if(!nftMeta.image||nftMeta.image.length === 0) {
+      alert("please upload your nft image!");
+      throw new Error("Invalid data!");
+    }
+    const {account,data}= await GetSignatureData()
+    const promise =  axios.post("/api/verify",{
+        address:account,
+        signature:data,
+        nft:nftMeta
+     });
+     const res = await toast.promise(
+      promise, {
+        pending: "Uploading MetaData",
+        success: "MetaData uploaded",
+        error: "MetaData upload error"
+      }
+    )
+     const IPFSdata = res.data as ipfsRes;
+     setNftURI(`${process.env.NEXT_PUBLIC_PINATA_DOMAIN}/ipfs/${IPFSdata.IpfsHash}`);
+    }catch(e:any){
+      console.error(e.messsage);
+    }
+  }
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setNftMeta({...nftMeta, [name]: value});
+  }
+
+  const createNft = async () => {
+    try {
+      alert(price);
+      //const nftRes = await axios.get(nftURI);
+      //const content = nftRes.data;
+
+     /* Object.keys(content).forEach(key => {
+        if (!ALLOWED_FIELDS.includes(key)) {
+          alert("Wrong operation!the nft has been created.");
+          throw new Error("Invalid Json structure");
+        }
+      })*/
+      const transaction = await contract?.mintToken(
+        nftURI,
+        ethers.utils.parseEther(price),{
+          value:ethers.utils.parseEther(price.toString())
+        }
+      );
+      await toast.promise(
+        transaction!.wait(), {
+          pending: "Uploading nft",
+          success: "nft uploaded",
+          error: "nft upload error"
+        }
+      );
+      alert("Cong!nft is created!");
+      window.location.replace("/");
+    } catch(e: any) {
+      console.error(e.message);
+    }
+  }
+
+  const handleImageAndUploadToIpfs = async(e:ChangeEvent<HTMLInputElement>)=>{
+    if(!e.target.files||e.target.files.length === 0){
+      console.error("please select a file");
+      return;
+    }
+    const file = e.target.files[0];
+    console.log("uploaded image file data:",file); 
+    const buffer = await file.arrayBuffer(); 
+    const bytes = new Uint8Array(buffer);
+    console.log("image bytes:",bytes);
+
+    try {
+      const {account, data} = await GetSignatureData();
+      const promise = axios.post("/api/verify-image", {
+        address: account,
+        signature: data,
+        bytes,
+        contentType: file.type,
+        fileName: file.name.replace(/\.[^/.]+$/, "")
+      });
+      //console.log(promise.data);
+      const res = await toast.promise(
+        promise, {
+          pending: "Uploading image",
+          success: "Image uploaded",
+          error: "Image upload error"
+        }
+      )
+      console.log("upload image data:",res.data);
+      const IPFSdata = res.data as ipfsRes;
+
+      setNftMeta({
+        ...nftMeta,
+        image:`${process.env.NEXT_PUBLIC_PINATA_DOMAIN}/ipfs/${IPFSdata.IpfsHash}`
+      });
+      
+
+
+    }catch(e:any){
+        console.error(e.messsage);
+      }
+  }
 
 
   return (
@@ -86,6 +216,7 @@ const NftCreate: NextPage = () => {
                       </label>
                       <div className="mt-1 flex rounded-md shadow-sm">
                         <input
+                          onChange={(e)=>setPrice(e.target.value)}
                           type="number"
                           name="price"
                           id="price"
@@ -97,6 +228,7 @@ const NftCreate: NextPage = () => {
                   </div>
                   <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                     <button
+                      onClick={createNft}
                       type="button"
                       className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
@@ -127,6 +259,8 @@ const NftCreate: NextPage = () => {
                     </label>
                     <div className="mt-1 flex rounded-md shadow-sm">
                       <input
+                        onChange={handleChange}
+                        value = {nftMeta.name}
                         type="text"
                         name="name"
                         id="name"
@@ -141,6 +275,8 @@ const NftCreate: NextPage = () => {
                     </label>
                     <div className="mt-1">
                       <textarea
+                        onChange={handleChange}
+                        value = {nftMeta.description}
                         id="description"
                         name="description"
                         rows={3}
@@ -153,7 +289,8 @@ const NftCreate: NextPage = () => {
                     </p>
                   </div>
                   {/* Has Image? */}
-                  { 
+                  { nftMeta.image ?
+                    <img src={nftMeta.image} alt="" className="h-40" /> :
                     <div>
                     <label className="block text-sm font-medium text-gray-700">Image</label>
                     <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -179,6 +316,7 @@ const NftCreate: NextPage = () => {
                           >
                             <span>Upload a file</span>
                             <input
+                              onChange={handleImageAndUploadToIpfs}
                               id="file-upload"
                               name="file-upload"
                               type="file"
@@ -192,33 +330,14 @@ const NftCreate: NextPage = () => {
                     </div>
                   </div>
                   }
-                  <div className="grid grid-cols-6 gap-6">
-                    { ATTRIBUTES.map(attribute =>
-                      <div key={attribute} className="col-span-6 sm:col-span-6 lg:col-span-2">
-                        <label htmlFor={attribute} className="block text-sm font-medium text-gray-700">
-                          {attribute}
-                        </label>
-                        <input
-                          value={attribute}
-                          type="text"
-                          name={attribute}
-                          id={attribute}
-                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-sm !mt-2 text-gray-500">
-                    Choose value from 0 to 100
-                  </p>
                 </div>
                 <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                   <button
-
+                    onClick = {uploadMetaToIpfs}
                     type="button"
                     className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
-                    Save
+                    upload
                   </button>
                 </div>
               </div>
