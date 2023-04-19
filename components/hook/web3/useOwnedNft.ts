@@ -7,6 +7,7 @@ import useSWR from "swr"
 
 type useOwnedNftRes = {
     listNFT:(tokenId:number,price:number) => Promise<void>
+    offloadNFT:(tokenId:number) => Promise<void>
 }
 
 type UseOwnedNftHookFactory = CrytoHookFactory<Nft[],useOwnedNftRes>
@@ -48,9 +49,27 @@ const listNFT = useCallback(async (tokenId:number,price:number) => {
             result!.wait(), {
               pending: "NFT is going to market",
               success: "nft is on sale",
-              error: "nft is failed to on sale"
+              error: "nft is failed to be on sale"
             }
           );
+    } catch (e:any){
+        console.error(e.messsage);
+    }
+},[_contract])
+
+const offloadNFT = useCallback(async (tokenId:number,price:number) => {
+    try{
+        const result = await _contract?.placeNftOffSale(
+            tokenId,
+        )
+        alert("Nft is off sale");
+        await toast.promise(
+            result!.wait(), {
+                pending: "NFT is offload from market",
+                success: "nft is off sale",
+                error: "nft is failed to be off sale"
+            }
+            );
     } catch (e:any){
         console.error(e.messsage);
     }
@@ -59,6 +78,11 @@ const listNFT = useCallback(async (tokenId:number,price:number) => {
     return {
         ...swr,
         listNFT,
+        offloadNFT,
         data: data || [],
     };
+
+
+
 }
+

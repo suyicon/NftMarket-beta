@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const { nft } = useListedNft();
-  console.log(nft.data);
+  console.log("nftdata:",nft.data);
 
 
 
@@ -46,9 +46,9 @@ export default function Home() {
       </div>
       <div className="relative">
         <div className="text-center">
-          <h2 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">Registry of Persona</h2>
+          <h2 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">Persona</h2>
           <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-            Gain a Persona to steal evildoers' heart!
+           夺取专属于你的人格面具吧！
           </p>
         </div>
           <NftList

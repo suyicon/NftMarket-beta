@@ -1,0 +1,75 @@
+<mxfile host="65bd71144e">
+    <diagram id="QmEkhM_QdyIBhtowF-4l" name="Page-1">
+        <mxGraphModel dx="1431" dy="371" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="NftMarket.sol：主合约，前端与这个合约交互" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fad7ac;strokeColor=#b46504;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="130" width="300" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Enumerable.sol" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="280" width="100" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="10" target="6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="ItemManager.sol" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="280" width="100" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="继承" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="220" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="继承" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="220" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="" style="endArrow=classic;html=1;exitX=0.201;exitY=1.014;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.4;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="2" target="10" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="170" y="290" as="sourcePoint"/>
+                        <mxPoint x="220" y="240" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="18" value="" style="endArrow=classic;html=1;exitX=0.201;exitY=1.014;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.4;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280.30000000000007" y="190.84000000000003" as="sourcePoint"/>
+                        <mxPoint x="280" y="280" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="21" value="管理与NFT元数据相关的内部功能与变量的合约" style="ellipse;whiteSpace=wrap;html=1;align=center;newEdgeStyle={&quot;edgeStyle&quot;:&quot;entityRelationEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;,&quot;segment&quot;:10,&quot;curved&quot;:1,&quot;sourcePerimeterSpacing&quot;:0,&quot;targetPerimeterSpacing&quot;:0};treeFolding=1;treeMoving=1;fillColor=#b1ddf0;strokeColor=#10739e;fontColor=#000000;" parent="1" vertex="1" collapsed="1">
+                    <mxGeometry x="-40" y="250" width="156" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="处理NFT枚举关系(归属关系以及数据关系)的合约" style="ellipse;whiteSpace=wrap;html=1;align=center;newEdgeStyle={&quot;edgeStyle&quot;:&quot;entityRelationEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;,&quot;segment&quot;:10,&quot;curved&quot;:1,&quot;sourcePerimeterSpacing&quot;:0,&quot;targetPerimeterSpacing&quot;:0};treeFolding=1;treeMoving=1;fillColor=#b1ddf0;strokeColor=#10739e;fontColor=#000000;" parent="1" vertex="1" collapsed="1">
+                    <mxGeometry x="300" y="250" width="160" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" style="edgeStyle=none;html=1;" parent="1" source="25" target="27" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="210" y="460" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="25" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;direction=north;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="390" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="ERC721storageURI" style="shape=ext;double=1;rounded=1;whiteSpace=wrap;html=1;fillColor=#fad9d5;strokeColor=#ae4132;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="450" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="继承" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="410" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="" style="endArrow=classic;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;" parent="1" source="6" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="310" y="470" as="sourcePoint"/>
+                        <mxPoint x="315" y="450" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="31" value="ERC721Enumerable" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="450" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="继承" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="400" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="Text" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="310" width="60" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

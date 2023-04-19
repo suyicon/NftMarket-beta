@@ -22,6 +22,12 @@ const NftCreate: NextPage = () => {
     image: "",
   });
   const[price,setPrice] = useState("");
+
+  /* Here is the explanation for the code above:
+1. We create a function called GetSignatureData. This function will be called when the user clicks the button
+2. We make a call to the server to get the message to sign.
+3. We send a request to the user to sign the message
+4. We return the account and the signature to the server to verify */
   const GetSignatureData = async()=>{
     console.log("create NFT:",nftMeta);
       const accounts = await ethereum?.request({method:"eth_requestAccounts"}) as string[];
@@ -148,11 +154,11 @@ const NftCreate: NextPage = () => {
         <div className="py-4">
           { !nftURI &&
             <div className="flex">
-              <div className="mr-2 font-bold underline">Do you have meta data already?</div>
+              <div className="mr-2 font-bold underline">选择NFT上传至IPFS的方式</div>
               <Switch
                 checked={hasURI}
                 onChange={() => setHasURI(!hasURI)}
-                className={`${hasURI ? 'bg-indigo-900' : 'bg-indigo-700'}
+                className={`${hasURI ? 'bg-green-500' : 'bg-yellow-300'}
                   relative inline-flex flex-shrink-0 h-[28px] w-[64px] border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
               >
                 <span className="sr-only">Use setting</span>
@@ -169,9 +175,9 @@ const NftCreate: NextPage = () => {
           <div className="md:grid md:grid-cols-3 md:gap-6">
             <div className="md:col-span-1">
               <div className="px-4 sm:px-0">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">List NFT</h3>
+                <h3 className="text-lg font-medium leading-6 text-gray-900">上传人格面具</h3>
                 <p className="mt-1 text-sm text-gray-600">
-                  This information will be displayed publicly so be careful what you share.
+                  您可以在这里把自己已拥有的人格面具加入到IPFS中!让他们帮助您偷走恶人们的心吧！
                 </p>
               </div>
             </div>
@@ -182,7 +188,7 @@ const NftCreate: NextPage = () => {
                     <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                       <div>
                         <label htmlFor="uri" className="block text-sm font-medium text-gray-700">
-                          URI Link
+                          URI
                         </label>
                         <div className="mt-1 flex rounded-md shadow-sm">
                           <input
@@ -212,7 +218,7 @@ const NftCreate: NextPage = () => {
                   <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                     <div>
                       <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                        Price (ETH)
+                        价格 (ETH)
                       </label>
                       <div className="mt-1 flex rounded-md shadow-sm">
                         <input
@@ -230,9 +236,9 @@ const NftCreate: NextPage = () => {
                     <button
                       onClick={createNft}
                       type="button"
-                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-500"
                     >
-                      List
+                      上传
                     </button>
                   </div>
                 </div>
@@ -243,9 +249,9 @@ const NftCreate: NextPage = () => {
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
-              <h3 className="text-lg font-medium leading-6 text-gray-900">Create NFT Metadata</h3>
+              <h3 className="text-lg font-medium leading-6 text-gray-900">创建您的人格面具</h3>
               <p className="mt-1 text-sm text-gray-600">
-                This information will be displayed publicly so be careful what you share.
+                在这里,您可以自由定制专属于您本人的人格面具!
               </p>
             </div>
           </div>
@@ -255,7 +261,7 @@ const NftCreate: NextPage = () => {
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                      Name
+                      名字
                     </label>
                     <div className="mt-1 flex rounded-md shadow-sm">
                       <input
@@ -265,13 +271,13 @@ const NftCreate: NextPage = () => {
                         name="name"
                         id="name"
                         className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-                        placeholder="My Nice NFT"
+                        placeholder="Izanagi"
                       />
                     </div>
                   </div>
                   <div>
                     <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                      Description
+                      描述
                     </label>
                     <div className="mt-1">
                       <textarea
@@ -281,18 +287,15 @@ const NftCreate: NextPage = () => {
                         name="description"
                         rows={3}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-                        placeholder="Some nft description..."
+                        placeholder="with some secret powers"
                       />
                     </div>
-                    <p className="mt-2 text-sm text-gray-500">
-                      Brief description of NFT
-                    </p>
                   </div>
                   {/* Has Image? */}
                   { nftMeta.image ?
                     <img src={nftMeta.image} alt="" className="h-40" /> :
                     <div>
-                    <label className="block text-sm font-medium text-gray-700">Image</label>
+                    <label className="block text-sm font-medium text-gray-700">图片</label>
                     <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                       <div className="space-y-1 text-center">
                         <svg
@@ -312,9 +315,9 @@ const NftCreate: NextPage = () => {
                         <div className="flex text-sm text-gray-600">
                           <label
                             htmlFor="file-upload"
-                            className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                            className="relative cursor-pointer bg-white rounded-md font-medium text-green-400 hover:text-green-300 "
                           >
-                            <span>Upload a file</span>
+                            <span>上传图片</span>
                             <input
                               onChange={handleImageAndUploadToIpfs}
                               id="file-upload"
@@ -323,9 +326,9 @@ const NftCreate: NextPage = () => {
                               className="sr-only"
                             />
                           </label>
-                          <p className="pl-1">or drag and drop</p>
+                          <p className="pl-1">或拖拽图片至此处</p>
                         </div>
-                        <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                        <p className="text-xs text-gray-500">支持PNG, JPG, GIF格式,最大10MB</p>
                       </div>
                     </div>
                   </div>
@@ -335,9 +338,9 @@ const NftCreate: NextPage = () => {
                   <button
                     onClick = {uploadMetaToIpfs}
                     type="button"
-                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-500 "
                   >
-                    upload
+                    铸造
                   </button>
                 </div>
               </div>

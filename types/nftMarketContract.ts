@@ -69,7 +69,6 @@ export interface NftMarketContractEventsContext {
 }
 export type NftMarketContractMethodNames =
   | 'new'
-  | '_ListedPrice'
   | 'approve'
   | 'balanceOf'
   | 'getApproved'
@@ -90,7 +89,7 @@ export type NftMarketContractMethodNames =
   | 'getNftItem'
   | 'listedItemsCount'
   | 'BuyNFT'
-  | 'getNFTCount'
+  | 'totalSupply'
   | 'tokenByIndex'
   | 'tokenByOwnedIndex'
   | 'tokenURIExists'
@@ -142,13 +141,6 @@ export interface NftMarketContract {
    * Type: constructor
    */
   'new'(overrides?: ContractTransactionOverrides): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   */
-  _ListedPrice(overrides?: ContractCallOverrides): Promise<BigNumber>;
   /**
    * Payable: false
    * Constant: false
@@ -379,7 +371,7 @@ export interface NftMarketContract {
    * StateMutability: view
    * Type: function
    */
-  getNFTCount(overrides?: ContractCallOverrides): Promise<BigNumber>;
+  totalSupply(overrides?: ContractCallOverrides): Promise<BigNumber>;
   /**
    * Payable: false
    * Constant: true

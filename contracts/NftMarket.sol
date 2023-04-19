@@ -13,8 +13,7 @@ contract NftMarket is ERC721URIStorage,Ownable {
     Counters.Counter private _Items;
     Counters.Counter private _TokenIds ;
 
-    //uint public _ListedPrice = 0.025 ether;
-
+    //uint public _ListedPrice = 1 ether;
     //all tokenid in nft
     uint256[] private _allNfts;
 
@@ -47,7 +46,7 @@ contract NftMarket is ERC721URIStorage,Ownable {
     }
     function mintToken(string memory tokenURI,uint price) public payable returns(uint){
         require(!tokenURIExists(tokenURI),"token URI is existed");
-        //require(msg.value == _ListedPrice,"payment is not equal to price listed");
+       // require(msg.value == _ListedPrice,"payment is not equal to price listed");
         _TokenIds.increment();
         _Items.increment();
 
@@ -65,7 +64,7 @@ contract NftMarket is ERC721URIStorage,Ownable {
         uint tokenId,
         uint price)private
         {
-            require(price>0,"Price must be at least 1 wei");
+            require(price>0,"Price must be ar least 1 wei");
             _idToNftItem[tokenId] = Item(tokenId,price,msg.sender,true);
             emit NFTCreation(tokenId,price,msg.sender,true);
         }
@@ -96,12 +95,12 @@ contract NftMarket is ERC721URIStorage,Ownable {
 
     }
 
-    function getNFTCount() public view returns(uint){
+    function totalSupply() public view returns(uint){
         return _allNfts.length;
     }
 
     function tokenByIndex(uint index)public view returns(uint){
-        require(index<getNFTCount(),"index is out of bound");
+        require(index<totalSupply(),"index is out of bound");
         return _allNfts[index];
     }
 
@@ -152,7 +151,7 @@ contract NftMarket is ERC721URIStorage,Ownable {
         _idToNftIndex[tokenId] = _allNfts.length;
         _allNfts.push(tokenId);
     }
-    //token that user prossess
+    //token that user prosess
     function _addTokenToOwnerEnum(address to,uint tokenId)private{
         uint tokenCount = ERC721.balanceOf(to);
         _ownedTokens[to][tokenCount] = tokenId;
@@ -162,7 +161,7 @@ contract NftMarket is ERC721URIStorage,Ownable {
 
 
     function getAllNFTOnSale() public view returns (Item[] memory){
-        uint allItemsCounts = getNFTCount();
+        uint allItemsCounts = totalSupply();
         uint CurrentIndex = 0;
         
         Item[] memory items = new Item[](_Items.current());

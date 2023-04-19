@@ -130,7 +130,7 @@ export default function Example() {
                       "Loading..." :
                       account.isInstalled ?
                       network.data :
-                      "Install Web3 Wallet"
+                      "Install MetaMask"
                     }
                   </span>
                 </div>
