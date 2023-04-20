@@ -6,10 +6,10 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "./Enumerable.sol";
 contract ItemManager is ERC721URIStorage,Enumerable {
     using Counters for Counters.Counter;
-    Counters.Counter private _items;
-    Counters.Counter private _tokenIds;
-    mapping(uint => Item) private _idToNftItem;
-    mapping(string => bool) private _usedTokenURIs;
+    Counters.Counter  _items;
+    Counters.Counter  _tokenIds;
+    mapping(uint => Item)  _idToNftItem;
+    mapping(string => bool)  _usedTokenURIs;
 
 
     constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
@@ -18,6 +18,7 @@ contract ItemManager is ERC721URIStorage,Enumerable {
         uint tokenId;
         uint price;
         address creator;
+        address owner;
         bool isListed;
     }
 
@@ -30,6 +31,7 @@ contract ItemManager is ERC721URIStorage,Enumerable {
     
     function _mintToken(address to, string memory tokenURI) internal returns (uint) {
         _tokenIds.increment();
+        _items.increment();
         uint _tokenId = _tokenIds.current();
 
         _safeMint(to, _tokenId);
@@ -50,12 +52,13 @@ contract ItemManager is ERC721URIStorage,Enumerable {
 
         _transfer(owner, buyer, tokenId);
         payable(owner).transfer(value);
+        _idToNftItem[tokenId].owner = buyer; 
     }
 
     function _createItem(uint tokenId, uint price,string memory tokenURI) internal {
         require(price > 0, "Price must be at least 1 wei");
         require(!_usedTokenURIs[tokenURI], "token URI is existed");
-        _idToNftItem[tokenId] = Item(tokenId, price, msg.sender, true);
+        _idToNftItem[tokenId] = Item(tokenId, price, msg.sender,msg.sender,true);
         _usedTokenURIs[tokenURI] = true;
         emit NFTCreation(tokenId, price, msg.sender, true);
     }
@@ -112,12 +115,11 @@ contract ItemManager is ERC721URIStorage,Enumerable {
         return items;
     }
 
-
     function _beforeTokenTransfer(address from,address to, uint256 tokenId,uint256 batchSize)internal virtual override{
         super._beforeTokenTransfer(from,to,tokenId,batchSize);
 
         if(from == address(0)){         
-            _addToTokenToAllTokensEnum(tokenId);
+            _addTokenToAllTokensEnum(tokenId);
         }
         else if(from!=to){
             _removeTokenFromOwnerEnum(from, tokenId);
@@ -130,5 +132,4 @@ contract ItemManager is ERC721URIStorage,Enumerable {
             _addTokenToOwnerEnum(to,tokenId);
         }
     }
-
 }

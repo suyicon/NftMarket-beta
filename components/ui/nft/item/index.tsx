@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Nft, NftMeta } from "@_types/nft";
 import { FunctionComponent } from "react";
+import { mutate } from "swr";
 
 type NftItemProps = {
   item:Nft;
@@ -44,7 +45,7 @@ const NftItem:FunctionComponent<NftItemProps> =({item,BuyNFT}) =>{
         </div>
         <div className="right:0">
           <button
-            onClick={()=>{BuyNFT(item.tokenId,item.price)}}
+            onClick={()=>{BuyNFT(item.tokenId,item.price);mutate(item)}}
             type="button"
             className=" disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none disabled:cursor-not-allowed mr-2 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-500 hover:bg-green-300"
           >

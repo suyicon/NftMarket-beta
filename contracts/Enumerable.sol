@@ -9,9 +9,9 @@ abstract contract Enumerable is ERC721URIStorage {
     using Counters for Counters.Counter;
 
     uint256[] _allNfts;
-    mapping(uint => uint) private _idToNftIndex;
-    mapping(address => mapping(uint => uint)) private _ownedTokens;
-    mapping(uint => uint) private _idToOwnedIndex;
+    mapping(uint => uint)  _idToNftIndex;
+    mapping(address => mapping(uint => uint))  _ownedTokens;
+    mapping(uint => uint)  _idToOwnedIndex;
 
     
     function totalSupply() public view returns(uint){
@@ -22,18 +22,13 @@ abstract contract Enumerable is ERC721URIStorage {
         require(index<totalSupply(),"index is out of bound");
         return _allNfts[index];
     }
-    
+
     function tokenByOwnedIndex(address owner,uint index)public view returns(uint){
         require(index<ERC721.balanceOf(owner),"index is out of bound");
         return _ownedTokens[owner][index];
     }
 
-    function _addToeknToAllTokensEnum(uint tokenId)private{
-        _idToNftIndex[tokenId] = _allNfts.length;
-        _allNfts.push(tokenId);
-    }
-
-    function _addToTokenToAllTokensEnum(uint tokenId) internal {
+    function _addTokenToAllTokensEnum(uint tokenId) internal {
         _idToNftIndex[tokenId] = _allNfts.length;
         _allNfts.push(tokenId);
     }
