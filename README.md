@@ -1,15 +1,11 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+We propose the design and implementation of an IPFS-based NFT trading platform for large-capacity digital collections to address this problem. The system uses the truffle framework to write and deploy smart contracts, and deploys the contracts on the Ganache test blockchain, which ensures the security and stability of the smart contracts and provides users with a reliable transaction guarantee, and uses web3.js to allow users to interact with the contracts through front-end pages in order to achieve a convenient and efficient user experience. The data of user collections will be stored in the IPFS system, using decentralized storage, trustworthy, secure and efficient, providing users with a one-stop digital collection storage and trading service.
 
 ## Getting Started
 
-First, run the development server:
+First, run the project:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+npm run nft-market
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -18,21 +14,14 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 
 [API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+## Project overview
+### Overall Architecture
+![image](https://github.com/suyicon/NftMarket-beta/assets/109325917/0d006d84-9fc0-4638-b766-a850bfdf7b85)
 
-To learn more about Next.js, take a look at the following resources:
+### Smart Contract
+![image](https://github.com/suyicon/NftMarket-beta/assets/109325917/a6242464-e59f-4a66-8111-3470190c7fd9)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
